@@ -2,17 +2,26 @@ package projetoJava;
 
 import java.util.Scanner;
 
-import projetoJava.util.Cores;
+import projetoJava.model.Acessorio;
+import projetoJava.model.Vinho;
+import projetoJava.produto.controller.ProdutoController;
 
 public class Menu {
+	
 	public static void main(String[] args) {
+		
+		ProdutoController produtos = new ProdutoController();	
+		
+		
+		
 		
 		Scanner scan = new Scanner(System.in);		
 		
 		int perfil;
+		// Cor menu
 		
 		do {
-			System.out.println(Cores.ANSI_BLACK_BACKGROUND_BRIGHT + Cores.TEXT_PURPLE_BOLD +
+			System.out.println(
 					          "*********************************************************************");
 			System.out.println("                                                                     ");
 			System.out.println("                      VINO & Co.                                     ");
@@ -30,7 +39,7 @@ public class Menu {
 			
 			switch(perfil) {
 			case 1:
-				menuAdministrador(scan);
+				menuAdministrador(scan, produtos);
 				break;
 				
 			case 2:
@@ -42,10 +51,14 @@ public class Menu {
 			
 		}while(perfil != 3);
 	}
-		
-		private static void menuAdministrador(Scanner scan) {
-		
-		int opcao;
+	
+	
+		public static void menuAdministrador(Scanner scan, ProdutoController produtos) {
+					
+		int opcao, estoque, id, tipo, safra;
+		String nome, descricao, tipoMaterial;
+		double teorAlcoolico;
+		float preco;
 
 		while(true) {
 			System.out.println(
@@ -81,24 +94,159 @@ public class Menu {
 		
 		switch(opcao) {
 		case 1:
-			System.out.println("Cadastrar Produto\n\n");
+			System.out.println("Cadastrar Produto\n\n");					
+								
+			do {
+				System.out.println("Digite o tipo do Produto (1-Vinho ou 2- Acessório: )");
+				tipo = scan.nextInt();			
+			} while(tipo < 1 || tipo > 2);
+			
+		switch(tipo) {
+		
+		case 1 -> {
+			System.out.println("Vinhos");
+			System.out.println("************************************************");
+			System.out.println("Digite o nome do Vinho: ");
+			scan.nextLine();
+			nome = scan.nextLine();
+			
+			
+			System.out.println("Digite a descrição do Produto: ");
+			descricao = scan.nextLine();			
+			
+			System.out.println("Digite o Preço: ");
+			preco = scan.nextFloat();
+			
+			System.out.println("Digite o estoque do produto: ");
+			estoque = scan.nextInt();
+								
+			System.out.println("Digite a safra do vinho: ");
+			safra = scan.nextInt();
+			
+			System.out.println("Digite o teor alcoolico: ");
+			teorAlcoolico = scan.nextDouble();
+			
+			produtos.cadastrar((new Vinho(produtos.gerarId(), nome, descricao, preco, estoque, safra, teorAlcoolico)));
+					
+		}
+		
+		case 2 -> {
+			System.out.println("Acessórios");
+			System.out.println("************************************************");
+			System.out.println("Digite o nome do Produto: ");
+			scan.nextLine();
+			nome = scan.nextLine();
+		
+		
+			
+			System.out.println("Digite a descrição do Produto: ");
+			descricao = scan.nextLine();
+					
+			System.out.println("Digite o Preço: ");
+			preco = scan.nextFloat();
+			
+			System.out.println("Digite o estoque do produto: ");
+			estoque = scan.nextInt();
+								
+			System.out.println("Digite o tipo de material: ");
+			scan.nextLine();
+			tipoMaterial = scan.nextLine();		
+			
+			
+			produtos.cadastrar((new Acessorio(produtos.gerarId(), nome, descricao, preco, estoque, tipoMaterial)));
+			
+			}
+		}
 			
 			break;
 				
 		case 2:
 			System.out.println("Listar Produto\n\n");
+			produtos.listarProdutos();				
 			break;
 			
 		case 3: 
-			System.out.println("Buscar produto por Nome\n\n");
+			System.out.println("Buscar produto por Id\n\n");
+			System.out.println("Digite o id do produto: ");
+			id = scan.nextInt();
+			
+			produtos.procurarPorID(id);				
 			break;
 			
-		case 4:
-			System.out.println("Atualizar Produtos\n\n");
-			break;
+		case 4:					
+			System.out.println("Atualizar dados do Produto\n\n");
+			System.out.println("Digite o id do Produto: ");
+			id = scan.nextInt();
+			scan.nextLine();
+			
+			var buscaId = produtos.buscarNaCollection(id);
+			
+			if(buscaId != null) {
+				
+				if(buscaId instanceof Vinho ) {						
+			
+				System.out.println("Digite o nome do Vinho: ");
+				scan.nextLine();
+				nome = scan.nextLine();
+				
+				
+				System.out.println("Digite a descrição do Produto: ");
+				descricao = scan.nextLine();			
+				
+				System.out.println("Digite o Preço: ");
+				preco = scan.nextFloat();
+				scan.nextLine();
+				
+				System.out.println("Digite o estoque do produto: ");
+				estoque = scan.nextInt();
+				scan.nextLine();
+									
+				System.out.println("Digite a safra do vinho: ");
+				safra = scan.nextInt();
+				scan.nextLine();
+				
+				System.out.println("Digite o teor alcoolico: ");
+				teorAlcoolico = scan.nextDouble();
+				scan.nextLine();
+				
+				produtos.atualizar(new Vinho(id, nome, descricao, preco, estoque, safra, teorAlcoolico));
+				
+							
+				}else if(buscaId instanceof Acessorio) {
+					System.out.println("Acessórios");
+					System.out.println("Digite o nome do Produto: ");
+					nome = scan.nextLine();
+										
+					System.out.println("Digite a descrição do Produto: ");
+					descricao = scan.nextLine();
+							
+					System.out.println("Digite o Preço: ");
+					preco = scan.nextFloat();
+					scan.nextLine();
+					
+					System.out.println("Digite o estoque do produto: ");
+					estoque = scan.nextInt();
+					scan.nextLine();
+										
+					System.out.println("Digite o tipo de material: ");
+					tipoMaterial = scan.nextLine();	
+					scan.nextLine();
+					
+					produtos.atualizar(new Acessorio(id, nome, descricao, preco, estoque, tipoMaterial));
+					
+					} else {
+						System.out.println("Id não foi encontrado!");			
+				
+					}
+			}
+			break;		
 		
 		case 5: 
 			System.out.println("Apagar Produto\n\n");
+			System.out.println("Digite o id do produto: ");
+			id = scan.nextInt();
+			
+			produtos.deletar(id);
 			break;
 			
 		default:
@@ -106,9 +254,7 @@ public class Menu {
 		}
 		
 	}
-		
-	
-}
+		}
 			
 		public static void menuCliente(Scanner scan) {
 			
@@ -160,9 +306,10 @@ public class Menu {
 				}				
 					
 				}while(opcao != 4);				
-		}
 		
 	
+		
+	}
 	public static void sobre() {
 		System.out.println("*********************************************************************");
 		System.out.println("Projeto Desenvolvido por: Alexania Toma                              ");
@@ -171,4 +318,8 @@ public class Menu {
 		System.out.println("*********************************************************************");
 	}
 	
-}
+ }
+	
+
+	
+
