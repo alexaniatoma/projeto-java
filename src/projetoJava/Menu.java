@@ -1,18 +1,18 @@
 package projetoJava;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import projetoJava.model.Acessorio;
 import projetoJava.model.Vinho;
 import projetoJava.produto.controller.ProdutoController;
+import projetoJava.util.Cores;
 
 public class Menu {
 	
 	public static void main(String[] args) {
 		
-		ProdutoController produtos = new ProdutoController();	
-		
-		
+		ProdutoController produtos = new ProdutoController();		
 		
 		
 		Scanner scan = new Scanner(System.in);		
@@ -135,8 +135,7 @@ public class Menu {
 			System.out.println("************************************************");
 			System.out.println("Digite o nome do Produto: ");
 			scan.nextLine();
-			nome = scan.nextLine();
-		
+			nome = scan.nextLine();	
 		
 			
 			System.out.println("Digite a descrição do Produto: ");
@@ -157,12 +156,13 @@ public class Menu {
 			
 			}
 		}
-			
+			keyPress();			
 			break;
 				
 		case 2:
 			System.out.println("Listar Produto\n\n");
-			produtos.listarProdutos();				
+			produtos.listarProdutos();
+			keyPress();
 			break;
 			
 		case 3: 
@@ -170,7 +170,8 @@ public class Menu {
 			System.out.println("Digite o id do produto: ");
 			id = scan.nextInt();
 			
-			produtos.procurarPorID(id);				
+			produtos.procurarPorID(id);	
+			keyPress();
 			break;
 			
 		case 4:					
@@ -239,6 +240,7 @@ public class Menu {
 				
 					}
 			}
+			keyPress();
 			break;		
 		
 		case 5: 
@@ -247,6 +249,7 @@ public class Menu {
 			id = scan.nextInt();
 			
 			produtos.deletar(id);
+			keyPress();
 			break;
 			
 		default:
@@ -287,14 +290,17 @@ public class Menu {
 				switch(opcao) {
 				case 1:
 					System.out.println("Exibindo Catálogo: ");
+					keyPress();
 					break;
 					
 				case 2: 
 					System.out.println("Criando Pedido...");
+					keyPress();
 					break;
 					
 				case 3:
 					System.out.println("Listando pedidos...");
+					keyPress();
 					break;
 					
 				case 4:
@@ -316,6 +322,15 @@ public class Menu {
 		System.out.println("Generation Brasil - generation@generation.org                        ");
 		System.out.println("github.com/conteudoGeneration                                        ");
 		System.out.println("*********************************************************************");
+	}
+	
+	public static void keyPress() {
+		try {
+			System.out.println("\nPressione Enter para Continuar...");
+			System.in.read();
+		}catch(IOException e) {
+			System.out.println("Você pressionou uma tecla diferente de enter!");
+		}
 	}
 	
  }
